@@ -1,0 +1,24 @@
+language: c
+cache:
+  directories:
+  - "$HOME/.ghc"
+  - "$HOME/.cabal"
+  - "$HOME/.stack"
+addons:
+  apt:
+    packages:
+    - libgmp-dev
+before_install:
+- unset CC
+- mkdir -p ~/.local/bin
+- export PATH=$HOME/.local/bin:$PATH
+- curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1
+  -C ~/.local/bin '*/stack'
+- stack setup
+install:
+- stack --no-terminal --install-ghc $ARGS test --only-dependencies
+script:
+- stack test
+notifications:
+  slack:
+    secure: DRl7NGnfJHZO8xH6NypsiitXrJLf4ihh2KwY/9bF8+zZiDAtyb/KWVR8weGyF4cJqtkgsGcDN8WgYjhDGH7BWmoNRqNNMJPiYQqVdo5BCXSB6bjRORHmHzA+H+KnovkXXSRMcgf+Zo+fvKsBfTSynxjpMT+H/p6OFqLcSRsxguIhOwybxPC3Iikvsh/DWdHsb/hQJ18MWDGe63eKBOMY6TTlLfT21ej4QCn87bZWQcukQ/zXfrQkb0b1Mz3+FuczAvyhsyjE6f0gWbdhP/ZIf56a167FzXakp56m6/i2QQONtZzmZDBwFhDua+9if52XUodIgRj/qDhyuSyuV0eUCMbW60hKBmgtgiXXvllAcjrSkDJ16h2ESY9raI171WYkS1aKFDzLsR8kAb8hMiyBYD3ROLaTvN7Hl2h0FVU+u2dwcjntlcCjKCouFWklJRACKh+G95CmAqpR7ObqGvrBW6M8tTgyUZKseTxzYjyV7YYf/Pf3igkEYvTcMtEOXlSgD/qtJJm6ldOGIulbC4+dD0Qedvue8YpXAjExJLY7jnNvs/Qa85pDE38AZ8l+thQUBGau6WNZEADlffhMRbdE3esSxr32VUAkaZ9CbRniNCcMSYW96zHZV95JzUL28C/9td3VnwtUanF8tBSRDQ1vmYPeLtgrcTxY7196TgNnmko=

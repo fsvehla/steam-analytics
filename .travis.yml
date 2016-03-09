@@ -1,0 +1,28 @@
+# Choose a lightweight base image; we provide our own build tools.
+language: c
+
+# Caching so the next build will be fast too.
+cache:
+  directories:
+  - $HOME/.ghc
+  - $HOME/.cabal
+  - $HOME/.stack
+
+addons:
+  apt:
+    packages:
+    - libgmp-dev
+
+before_install:
+# Using compiler above sets CC to an invalid value, so unset it
+- unset CC
+- mkdir -p ~/.local/bin
+- export PATH=$HOME/.local/bin:$PATH
+- curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+- stack setup
+
+install:
+- stack --no-terminal --install-ghc $ARGS test --only-dependencies
+
+script:
+- stack test

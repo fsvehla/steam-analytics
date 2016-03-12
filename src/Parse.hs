@@ -1,11 +1,15 @@
 module Parse
     (
-      totalCents
+      totalCents,
+      purchaseDate
     ) where
 
 import Text.Read as R
 import Data.List as DL
 import Data.Char (isDigit)
+import Data.Time.Calendar
+import Data.Time.Format as DF
+import Data.Time.Clock
 
 totalCents :: String -> Either String Int
 totalCents "" = Left "empty input"
@@ -23,6 +27,14 @@ totalCents  s = case elemIndex ',' s of
       else
         unsigned
 
+-- todo: Figure out why an Either in parseTimeM will throw instead of filling in the left.
+
+purchaseDate :: String -> Either String Day
+purchaseDate s = do
+  let utcTime  = DF.parseTimeM True DF.defaultTimeLocale "%e %b, %Y" s :: Maybe UTCTime
+  let asEither = maybeToEither ("Unable to parse '" ++ s ++ "' as date" ) utcTime
+  fmap (\utcTime -> utctDay utcTime) asEither
+
 digits :: String -> Either String Int
 digits "" = Left "Empty input"
 digits s  = annotateLeft ("For input '" ++ s ++ "': ") (R.readEither (filter isDigit s) :: Either String Int)
@@ -31,3 +43,7 @@ digits s  = annotateLeft ("For input '" ++ s ++ "': ") (R.readEither (filter isD
 annotateLeft :: String -> Either String a -> Either String a
 annotateLeft _ (Right a) = Right a
 annotateLeft s (Left  v) = Left(s ++ v)
+
+maybeToEither :: l -> Maybe a -> Either l a
+maybeToEither _ (Just a) = Right a
+maybeToEither l Nothing  = Left l

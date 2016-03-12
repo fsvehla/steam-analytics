@@ -31,9 +31,8 @@ totalCents  s = case elemIndex ',' s of
 
 purchaseDate :: String -> Either String Day
 purchaseDate s = do
-  let utcTime  = DF.parseTimeM True DF.defaultTimeLocale "%e %b, %Y" s :: Maybe UTCTime
-  let asEither = maybeToEither ("Unable to parse '" ++ s ++ "' as date" ) utcTime
-  fmap (\utcTime -> utctDay utcTime) asEither
+  let utcTime  = DF.parseTimeM True DF.defaultTimeLocale "%e %b, %Y" s :: Maybe Day
+  maybeToEither ("Unable to parse '" ++ s ++ "' as date" ) utcTime
 
 digits :: String -> Either String Int
 digits "" = Left "Empty input"

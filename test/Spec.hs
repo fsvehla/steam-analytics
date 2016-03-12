@@ -9,6 +9,7 @@ main = hspec $ do
     it "parses the numbers as cents" $ do
       totalCents "15,99€"  `shouldBe` Right (1599 :: Int)
       totalCents "-15,99€" `shouldBe` Right (-1599 :: Int)
+      totalCents "20,--€" `shouldBe`  Right (2000 :: Int)
 
     it "handles error conditions" $ do
       totalCents ""       `shouldBe` Left  "empty input"

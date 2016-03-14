@@ -1,7 +1,8 @@
 module Parse
     (
       totalCents,
-      purchaseDate
+      purchaseDate,
+      maybeToEither
     ) where
 
 import Text.Read as R
@@ -19,7 +20,7 @@ totalCents  s = case elemIndex ',' s of
       let (integer_s, fractional_s) = splitAt p s
 
       let euros    = digits integer_s
-      let cents    = digits fractional_s
+      let cents    = digits $ if take 3 fractional_s == ",--" then "00" else fractional_s
       let unsigned = (+) <$> fmap (* 100) euros <*> cents
 
       if head s == '-' then

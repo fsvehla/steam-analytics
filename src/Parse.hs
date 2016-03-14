@@ -1,7 +1,8 @@
 module Parse
     (
       totalCents,
-      purchaseDate
+      purchaseDate,
+      maybeToEither
     ) where
 
 import Text.Read as R

@@ -16,8 +16,10 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Parse
+                     , Scrape
   build-depends:       base >= 4.7 && < 5
                      , time
+                     , scalpel
   default-language:    Haskell2010
 
 executable steam-analytics-exe

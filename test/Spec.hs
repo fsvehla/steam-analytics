@@ -28,7 +28,14 @@ main = hspec $ do
       factorioHtml <- readFile "test/data/row-factorio.html"
       Scrape.purchase factorioHtml `shouldBe` Right Purchase {
         centAmount = 2000
-      , date = fromGregorian 2016 3 2
+      , date       = fromGregorian 2016 3 2
+      }
+
+    it "returns a record with negative cents for refunds" $ do
+      factorioHtml <- readFile "test/data/bezier-refund.html"
+      Scrape.purchase factorioHtml `shouldBe` Right Purchase {
+        centAmount = (-899)
+      , date       = fromGregorian 2016 3 7
       }
 
     it "fails on missing input" $ do
